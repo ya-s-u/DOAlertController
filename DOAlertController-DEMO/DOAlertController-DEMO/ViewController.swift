@@ -16,6 +16,7 @@ class ViewController : UITableViewController, UITextFieldDelegate {
     weak var textField1: UITextField?
     weak var textField2: UITextField?
     weak var customAlertAction: DOAlertAction?
+    var indicatorController = DOAlertController()
     
     // A matrix of closures that should be invoked based on which table view cell is
     // tapped (index by section, row).
@@ -28,7 +29,8 @@ class ViewController : UITableViewController, UITextFieldDelegate {
                 self.showOtherAlert,
                 self.showTextEntryAlert,
                 self.showSecureTextEntryAlert,
-                self.showCustomAlert
+                self.showCustomAlert,
+                self.showIndicatorAlert
             ],
             // Action sheet style alerts.
             [
@@ -287,6 +289,31 @@ class ViewController : UITableViewController, UITextFieldDelegate {
         customAlertController.addAction(otherAction)
         
         presentViewController(customAlertController, animated: true, completion: nil)
+    }
+    
+    /// Show an alert with activity indicator.
+    func showIndicatorAlert(_: NSIndexPath) {
+        let title = "データ通信中"
+        let message = "データ通信中です。しばらくお待ちください。"
+        
+        indicatorController = DOAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        // Create the action.
+        let indicator = DOAlertAction(title: "", style: .Indicator) { action in
+        }
+        
+        // Add the action.
+        indicatorController.addAction(indicator)
+        
+        presentViewController(indicatorController, animated: true, completion: nil)
+        
+        NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector:"hideAlert", userInfo: nil, repeats: false)
+    }
+    
+    func hideAlert() {
+        indicatorController.dismissViewControllerAnimated(true, completion: {
+            println("Removed alert")
+        })
     }
     
     // MARK: DOAlertControllerStyleActionSheet Style Alerts

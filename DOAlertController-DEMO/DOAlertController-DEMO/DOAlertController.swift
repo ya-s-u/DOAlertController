@@ -18,6 +18,7 @@ enum DOAlertActionStyle : Int {
     case Default
     case Cancel
     case Destructive
+    case Indicator
 }
 
 enum DOAlertControllerStyle : Int {
@@ -146,7 +147,7 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     var message: String?
     
     // AlertController Style
-    private(set) var preferredStyle: DOAlertControllerStyle?
+    var preferredStyle: DOAlertControllerStyle?
     
     // OverlayView
     private var overlayView = UIView()
@@ -228,12 +229,14 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     var buttonBgColor: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor(red:52/255, green:152/255, blue:219/255, alpha:1),
         .Cancel  : UIColor(red:127/255, green:140/255, blue:141/255, alpha:1),
-        .Destructive  : UIColor(red:231/255, green:76/255, blue:60/255, alpha:1)
+        .Destructive  : UIColor(red:231/255, green:76/255, blue:60/255, alpha:1),
+        .Indicator  : UIColor.clearColor()
     ]
     var buttonBgColorHighlighted: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor(red:74/255, green:163/255, blue:223/255, alpha:1),
         .Cancel  : UIColor(red:140/255, green:152/255, blue:153/255, alpha:1),
-        .Destructive  : UIColor(red:234/255, green:97/255, blue:83/255, alpha:1)
+        .Destructive  : UIColor(red:234/255, green:97/255, blue:83/255, alpha:1),
+        .Indicator  : UIColor.clearColor()
     ]
     private var buttonCornerRadius: CGFloat = 4.0
     
@@ -699,11 +702,22 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
         // Add Button
         let button = UIButton()
         button.layer.masksToBounds = true
-        button.setTitle(action.title, forState: .Normal)
-        button.enabled = action.enabled
         button.layer.cornerRadius = buttonCornerRadius
         button.addTarget(self, action: Selector("buttonTapped:"), forControlEvents: .TouchUpInside)
         button.tag = buttons.count + 1
+        
+        if action.style == DOAlertActionStyle.Indicator {
+            // Add loading indicator
+            let indicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, innerContentWidth, buttonHeight))
+            indicator.activityIndicatorViewStyle = .Gray
+            indicator.startAnimating()
+            button.addSubview(indicator)
+            button.enabled = false
+        } else {
+            button.setTitle(action.title, forState: .Normal)
+            button.enabled = action.enabled
+        }
+        
         buttons.append(button)
         buttonContainer.addSubview(button)
     }
