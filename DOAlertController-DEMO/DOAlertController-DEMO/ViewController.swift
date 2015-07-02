@@ -218,10 +218,10 @@ class ViewController : UITableViewController, UITextFieldDelegate {
         // AlertView
         customAlertController.alertViewBgColor = UIColor(red:44/255, green:62/255, blue:80/255, alpha:1)
         // Title
-        customAlertController.titleFont = UIFont(name: "GillSans-Bold", size: 18.0)
+        customAlertController.titleFont = UIFont(name: "GillSans-Bold", size: 18.0)!
         customAlertController.titleTextColor = UIColor(red:241/255, green:196/255, blue:15/255, alpha:1)
         // Message
-        customAlertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)
+        customAlertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)!
         customAlertController.messageTextColor = UIColor.whiteColor()
         // Cancel Button
         customAlertController.buttonFont[.Cancel] = UIFont(name: "GillSans-Bold", size: 16.0)
@@ -381,10 +381,10 @@ class ViewController : UITableViewController, UITextFieldDelegate {
         // AlertView
         alertController.alertViewBgColor = UIColor(red:44/255, green:62/255, blue:80/255, alpha:1)
         // Title
-        alertController.titleFont = UIFont(name: "GillSans-Bold", size: 18.0)
+        alertController.titleFont = UIFont(name: "GillSans-Bold", size: 18.0)!
         alertController.titleTextColor = UIColor(red:241/255, green:196/255, blue:15/255, alpha:1)
         // Message
-        alertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)
+        alertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)!
         alertController.messageTextColor = UIColor.whiteColor()
         // Cancel Button
         alertController.buttonFont[.Cancel] = UIFont(name: "GillSans-Bold", size: 16.0)

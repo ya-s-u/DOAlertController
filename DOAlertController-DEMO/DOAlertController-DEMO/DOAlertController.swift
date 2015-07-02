@@ -179,12 +179,12 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     
     // TitleLabel
     private var titleLabel = UILabel()
-    var titleFont = UIFont(name: "HelveticaNeue-Bold", size: 18)
+    var titleFont = UIFont.boldSystemFontOfSize(18)
     var titleTextColor = UIColor(red:77/255, green:77/255, blue:77/255, alpha:1.0)
     
     // MessageView
     private var messageView = UILabel()
-    var messageFont = UIFont(name: "HelveticaNeue", size: 15)
+    var messageFont = UIFont.systemFontOfSize(15)
     var messageTextColor = UIColor(red:77/255, green:77/255, blue:77/255, alpha:1.0)
     
     // TextFieldContainerView
@@ -217,9 +217,9 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     // Buttons
     private var buttons = [UIButton]()
     var buttonFont: [DOAlertActionStyle : UIFont!] = [
-        .Default : UIFont(name: "HelveticaNeue-Bold", size: 16),
-        .Cancel  : UIFont(name: "HelveticaNeue-Bold", size: 16),
-        .Destructive  : UIFont(name: "HelveticaNeue-Bold", size: 16)
+        .Default : UIFont.boldSystemFontOfSize(16),
+        .Cancel  : UIFont.boldSystemFontOfSize(16),
+        .Destructive  : UIFont.boldSystemFontOfSize(16)
     ]
     var buttonTextColor: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor.whiteColor(),
