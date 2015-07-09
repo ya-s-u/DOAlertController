@@ -223,13 +223,6 @@ class ViewController : UITableViewController, UITextFieldDelegate {
         // Message
         customAlertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)!
         customAlertController.messageTextColor = UIColor.whiteColor()
-        // Cancel Button
-        customAlertController.buttonFont[.Cancel] = UIFont(name: "GillSans-Bold", size: 16.0)
-        // Default Button
-        customAlertController.buttonFont[.Default] = UIFont(name: "GillSans-Bold", size: 16.0)
-        customAlertController.buttonTextColor[.Default] = UIColor(red:44/255, green:62/255, blue:80/255, alpha:1)
-        customAlertController.buttonBgColor[.Default] = UIColor(red: 46/255, green:204/255, blue:113/255, alpha:1)
-        customAlertController.buttonBgColorHighlighted[.Default] = UIColor(red:64/255, green:212/255, blue:126/255, alpha:1)
         
         
         customAlertController.addTextFieldWithConfigurationHandler { textField in
@@ -368,50 +361,79 @@ class ViewController : UITableViewController, UITextFieldDelegate {
     
     /// Show a custom dialog.
     func showCustomActionSheet(selectedIndexPath: NSIndexPath) {
-        let title = "A Short Title is Best"
+        let alertController = DOAlertController(title: "サークルを選択してください", message: nil, preferredStyle: .ActionSheet)
+        
+        // Create the actions.
+        let destructiveAction1 = DOAlertAction(title: "バケツプリンサークル🍮", style: .Default) { action in
+            self.dismissViewControllerAnimated(true, completion: {
+                self.showReport()
+            })
+        }
+        let destructiveAction2 = DOAlertAction(title: "バケツプリンサークル🍮", style: .Default) { action in
+            self.dismissViewControllerAnimated(true, completion: {
+                self.showJoin()
+            })
+        }
+        let cancelAction = DOAlertAction(title: "キャンセル", style: .Cancel) { action in
+            println("cancel")
+        }
+        
+        // Add the actions.
+        alertController.addAction(destructiveAction1)
+        alertController.addAction(destructiveAction2)
+        alertController.addAction(cancelAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func showReport() {
+        println("report")
+        
+        let title = "Text Entry Alert"
         let message = "A message should be a short, complete sentence."
         let cancelButtonTitle = "Cancel"
-        let otherButtonTitle = "Save"
-        let destructiveButtonTitle = "Delete"
+        let otherButtonTitle = "OK"
         
-        let alertController = DOAlertController(title: title, message: message, preferredStyle: .ActionSheet)
+        let alertController = DOAlertController(title: title, message: message, preferredStyle: .Alert)
         
-        // OverlayView
-        alertController.overlayColor = UIColor(red:235/255, green:245/255, blue:255/255, alpha:0.7)
-        // AlertView
-        alertController.alertViewBgColor = UIColor(red:44/255, green:62/255, blue:80/255, alpha:1)
-        // Title
-        alertController.titleFont = UIFont(name: "GillSans-Bold", size: 18.0)!
-        alertController.titleTextColor = UIColor(red:241/255, green:196/255, blue:15/255, alpha:1)
-        // Message
-        alertController.messageFont = UIFont(name: "GillSans-Italic", size: 15.0)!
-        alertController.messageTextColor = UIColor.whiteColor()
-        // Cancel Button
-        alertController.buttonFont[.Cancel] = UIFont(name: "GillSans-Bold", size: 16.0)
-        // Other Button
-        alertController.buttonFont[.Default] = UIFont(name: "GillSans-Bold", size: 16.0)
-        // Default Button
-        alertController.buttonFont[.Destructive] = UIFont(name: "GillSans-Bold", size: 16.0)
-        alertController.buttonBgColor[.Destructive] = UIColor(red: 192/255, green:57/255, blue:43/255, alpha:1)
-        alertController.buttonBgColorHighlighted[.Destructive] = UIColor(red:209/255, green:66/255, blue:51/255, alpha:1)
+        // Add the text field for text entry.
+        alertController.addTextFieldWithConfigurationHandler { textField in
+            println("textField")
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleTextFieldTextDidChangeNotification:", name: UITextFieldTextDidChangeNotification, object: textField)
+        }
         
         // Create the actions.
         let cancelAction = DOAlertAction(title: cancelButtonTitle, style: .Cancel) { action in
-            NSLog("The \"Custom\" alert action sheet's cancel action occured.")
+            NSLog("The \"Text Entry\" alert's cancel action occured.")
         }
         
         let otherAction = DOAlertAction(title: otherButtonTitle, style: .Default) { action in
-            NSLog("The \"Custom\" alert action sheet's other action occured.")
-        }
-        
-        let destructiveAction = DOAlertAction(title: destructiveButtonTitle, style: .Destructive) { action in
-            NSLog("The \"Custom\" alert action sheet's destructive action occured.")
+            NSLog("The \"Text Entry\" alert's other action occured.")
         }
         
         // Add the actions.
         alertController.addAction(cancelAction)
         alertController.addAction(otherAction)
-        alertController.addAction(destructiveAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func showJoin() {
+        println("join")
+        
+        let title = "Simple Alert"
+        let message = "A message should be a short, complete sentence."
+        let cancelButtonTitle = "OK"
+        
+        let alertController = DOAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        // Create the action.
+        let cancelAction = DOAlertAction(title: cancelButtonTitle, style: .Cancel) { action in
+            NSLog("The simple alert's cancel action occured.")
+        }
+        
+        // Add the action.
+        alertController.addAction(cancelAction)
         
         presentViewController(alertController, animated: true, completion: nil)
     }
@@ -420,9 +442,10 @@ class ViewController : UITableViewController, UITextFieldDelegate {
     
     func handleTextFieldTextDidChangeNotification(notification: NSNotification) {
         let textField = notification.object as! UITextField
+        println(textField.text)
         
         // Enforce a minimum length of >= 5 characters for secure text alerts.
-        secureTextAlertAction!.enabled = count(textField.text) >= 5
+//        secureTextAlertAction!.enabled = count(textField.text) >= 5
     }
     
     // MARK: UITextFieldDelegate Methods

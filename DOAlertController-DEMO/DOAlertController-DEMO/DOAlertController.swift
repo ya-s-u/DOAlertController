@@ -216,16 +216,8 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     
     // Buttons
     private var buttons = [UIButton]()
-    var buttonFont: [DOAlertActionStyle : UIFont!] = [
-        .Default : UIFont.boldSystemFontOfSize(16),
-        .Cancel  : UIFont.boldSystemFontOfSize(16),
-        .Destructive  : UIFont.boldSystemFontOfSize(16)
-    ]
-    var buttonTextColor: [DOAlertActionStyle : UIColor] = [
-        .Default : UIColor.whiteColor(),
-        .Cancel  : UIColor.whiteColor(),
-        .Destructive  : UIColor.whiteColor()
-    ]
+    var buttonFont = UIFont.boldSystemFontOfSize(16)
+    var buttonTextColor = UIColor.whiteColor()
     var buttonBgColor: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor(red:52/255, green:152/255, blue:219/255, alpha:1),
         .Cancel  : UIColor(red:127/255, green:140/255, blue:141/255, alpha:1),
@@ -523,8 +515,8 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
             var buttonPositionX: CGFloat = 0.0
             for button in buttons {
                 let action = actions[button.tag - 1] as! DOAlertAction
-                button.titleLabel?.font = buttonFont[action.style]
-                button.setTitleColor(buttonTextColor[action.style], forState: .Normal)
+                button.titleLabel?.font = buttonFont
+                button.setTitleColor(buttonTextColor, forState: .Normal)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColor[action.style]!), forState: .Normal)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Highlighted)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Selected)
@@ -535,17 +527,13 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
         } else {
             for button in buttons {
                 let action = actions[button.tag - 1] as! DOAlertAction
-                if (action.style != DOAlertActionStyle.Cancel) {
-                    button.titleLabel?.font = buttonFont[action.style]
-                    button.setTitleColor(buttonTextColor[action.style], forState: .Normal)
-                    button.setBackgroundImage(createImageFromUIColor(buttonBgColor[action.style]!), forState: .Normal)
-                    button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Highlighted)
-                    button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Selected)
-                    button.frame = CGRectMake(0, buttonAreaPositionY, innerContentWidth, buttonHeight)
-                    buttonAreaPositionY += buttonHeight + buttonMargin
-                } else {
-                    cancelButtonTag = button.tag
-                }
+                button.titleLabel?.font = buttonFont
+                button.setTitleColor(buttonTextColor, forState: .Normal)
+                button.setBackgroundImage(createImageFromUIColor(buttonBgColor[action.style]!), forState: .Normal)
+                button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Highlighted)
+                button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Selected)
+                button.frame = CGRectMake(0, buttonAreaPositionY, innerContentWidth, buttonHeight)
+                buttonAreaPositionY += buttonHeight + buttonMargin
             }
             
             // Cancel Button
@@ -555,8 +543,8 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
                 }
                 var button = buttonAreaScrollView.viewWithTag(cancelButtonTag) as! UIButton
                 let action = actions[cancelButtonTag - 1] as! DOAlertAction
-                button.titleLabel?.font = buttonFont[action.style]
-                button.setTitleColor(buttonTextColor[action.style], forState: .Normal)
+                button.titleLabel?.font = buttonFont
+                button.setTitleColor(buttonTextColor, forState: .Normal)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColor[action.style]!), forState: .Normal)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Highlighted)
                 button.setBackgroundImage(createImageFromUIColor(buttonBgColorHighlighted[action.style]!), forState: .Selected)
@@ -686,16 +674,6 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     
     // Attaches an action object to the alert or action sheet.
     func addAction(action: DOAlertAction) {
-        // Error
-        if (action.style == DOAlertActionStyle.Cancel) {
-            for ac in actions as! [DOAlertAction] {
-                if (ac.style == DOAlertActionStyle.Cancel) {
-                    var error: NSError?
-                    NSException.raise("NSInternalInconsistencyException", format:"DOAlertController can only have one action with a style of DOAlertActionStyleCancel", arguments:getVaList([error ?? "nil"]))
-                    return
-                }
-            }
-        }
         // Add Action
         actions.append(action)
         
